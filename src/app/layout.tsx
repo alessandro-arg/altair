@@ -17,7 +17,7 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Altair - IDE",
+  title: "Altair",
   description:
     "AI supported IDE for creating your projects with an autocomplete feature. Save your work on your GitHub repositories and work on it locally.",
 };
