@@ -1,9 +1,12 @@
 "use client";
 
+import * as Sentry from "@sentry/nextjs";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useAuth } from "@clerk/nextjs";
 
 export default function DemoPage() {
+  const { userId } = useAuth();
   const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
 
@@ -20,6 +23,9 @@ export default function DemoPage() {
   };
 
   const handleClientError = () => {
+    Sentry.logger.info("User attempting to click on client function", {
+      userId,
+    });
     throw new Error("Client error: Something went wrong in the browser!");
   };
 
