@@ -3,9 +3,15 @@ import { useProjectsPartial } from "../hooks/use-projects";
 import { Kbd } from "@/components/ui/kbd";
 import { Doc } from "../../../../convex/_generated/dataModel";
 import Link from "next/link";
-import { AlertCircleIcon, GlobeIcon, Loader2Icon } from "lucide-react";
+import {
+  AlertCircleIcon,
+  ArrowRightIcon,
+  GlobeIcon,
+  Loader2Icon,
+} from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { FaGithub } from "react-icons/fa";
+import { Button } from "@/components/ui/button";
 
 const formatTimestamp = (timestamp: number) => {
   return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
@@ -30,7 +36,29 @@ const getProjectIcon = (project: Doc<"projects">) => {
 };
 
 const ContinueCard = ({ data }: { data: Doc<"projects"> }) => {
-  return <div>Test</div>;
+  return (
+    <div className="flex flex-col gap-2">
+      <span className="text-xs text-muted-foreground">Last updated</span>
+      <Button
+        variant="outline"
+        asChild
+        className="h-auto items-start justify-start p-4 bg-background border rounded-none flex flex-col gap-2"
+      >
+        <Link href={`/projects/${data._id}`} className="group">
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-2">
+              {getProjectIcon(data)}
+              <span className="font-medium truncate">{data.name}</span>
+            </div>
+            <ArrowRightIcon className="size-4 text-muted-foreground group-hover:translate-x-0.5 transition-transform" />
+          </div>
+          <span className="text-xs text-muted-foreground">
+            {formatTimestamp(data.updatedAt)}
+          </span>
+        </Link>
+      </Button>
+    </div>
+  );
 };
 
 const ProjectItem = ({ data }: { data: Doc<"projects"> }) => {
@@ -65,14 +93,17 @@ export const ProjectsList = ({ onViewAll }: ProjectsListProps) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <ContinueCard data={mostRecent} />
+      {mostRecent ? <ContinueCard data={mostRecent} /> : null}
       {rest.length > 0 && (
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between gap-2">
             <span className="text-xs text-muted-foreground">
               Recent Projects
             </span>
-            <button className="flex items-center gap-2 text-muted-foreground text-xs hover:text-foreground transition-colors">
+            <button
+              onClick={onViewAll}
+              className="flex items-center gap-2 text-muted-foreground text-xs hover:text-foreground transition-colors"
+            >
               <span>View all</span>
               <Kbd className="bg-accent border">Ctrl + K</Kbd>
             </button>
