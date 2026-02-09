@@ -13,6 +13,8 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Poppins } from "next/font/google";
 import { UserButton } from "@clerk/nextjs";
+import { useProject, useRenameProject } from "../hooks/use-projects";
+import { useState } from "react";
 
 const font = Poppins({
   subsets: ["latin"],
@@ -20,6 +22,18 @@ const font = Poppins({
 });
 
 export const Navbar = ({ projectId }: { projectId: Id<"projects"> }) => {
+  const project = useProject(projectId);
+  const renameProject = useRenameProject(projectId);
+
+  const [isRenaming, setIsRenaming] = useState(false);
+  const [name, setName] = useState("");
+
+  const handleStartRename = () => {
+    if (!project) return;
+    setName(project.name);
+    setIsRenaming(true);
+  };
+
   return (
     <nav className="flex justify-between items-center gap-x-2 p-2 bg-sidebar border-b">
       <div className="flex items-center gap-x-2">
@@ -41,9 +55,25 @@ export const Navbar = ({ projectId }: { projectId: Id<"projects"> }) => {
             </BreadcrumbItem>
             <BreadcrumbSeparator className="ml-0! mr-1" />
             <BreadcrumbItem>
-              <BreadcrumbPage className="text-sm cursor-pointer hover:text-primary font-medium max-w-40 truncate">
-                Demo project
-              </BreadcrumbPage>
+              {isRenaming ? (
+                <input
+                  autoFocus
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  onFocus={(e) => e.currentTarget.select()}
+                  onBlur={() => {}}
+                  onKeyDown={() => {}}
+                  className="text-sm bg-transparent text-foreground outline-none focus:ring-1 focus:ring-inset focus:ring-ring font-medium max-w-40 truncate"
+                />
+              ) : (
+                <BreadcrumbPage
+                  onClick={handleStartRename}
+                  className="text-sm cursor-pointer hover:text-primary font-medium max-w-40 truncate"
+                >
+                  {project?.name ?? "Loading..."}
+                </BreadcrumbPage>
+              )}
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
