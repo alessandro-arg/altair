@@ -1,7 +1,10 @@
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
-import { useAuth } from "@clerk/nextjs";
+
+export const useProject = (projectId: Id<"projects">) => {
+  return useQuery(api.projects.getById, { id: projectId });
+};
 
 export const useProjects = () => {
   return useQuery(api.projects.get);
