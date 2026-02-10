@@ -15,6 +15,13 @@ import { Poppins } from "next/font/google";
 import { UserButton } from "@clerk/nextjs";
 import { useProject, useRenameProject } from "../hooks/use-projects";
 import { useState } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { CloudCheckIcon, LoaderIcon } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
 
 const font = Poppins({
   subsets: ["latin"],
@@ -32,6 +39,24 @@ export const Navbar = ({ projectId }: { projectId: Id<"projects"> }) => {
     if (!project) return;
     setName(project.name);
     setIsRenaming(true);
+  };
+
+  const handleSubmit = () => {
+    if (!project) return;
+    setIsRenaming(false);
+
+    const trimmedName = name.trim();
+    if (!trimmedName || trimmedName === project.name) return;
+
+    renameProject({ id: projectId, name: trimmedName });
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleSubmit();
+    } else if (e.key === "Escape") {
+      setIsRenaming(false);
+    }
   };
 
   return (
@@ -62,8 +87,8 @@ export const Navbar = ({ projectId }: { projectId: Id<"projects"> }) => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   onFocus={(e) => e.currentTarget.select()}
-                  onBlur={() => {}}
-                  onKeyDown={() => {}}
+                  onBlur={handleSubmit}
+                  onKeyDown={handleKeyDown}
                   className="text-sm bg-transparent text-foreground outline-none focus:ring-1 focus:ring-inset focus:ring-ring font-medium max-w-40 truncate"
                 />
               ) : (
@@ -77,6 +102,26 @@ export const Navbar = ({ projectId }: { projectId: Id<"projects"> }) => {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
+        {project?.importStatus === "importing" ? (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <LoaderIcon className="size-4 text-muted-foreground animate-spin" />
+            </TooltipTrigger>
+            <TooltipContent>Importing...</TooltipContent>
+          </Tooltip>
+        ) : (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <CloudCheckIcon className="size-4 text-muted-foreground" />
+            </TooltipTrigger>
+            <TooltipContent>
+              Saved{" "}
+              {project?.updatedAt
+                ? formatDistanceToNow(project.updatedAt, { addSuffix: true })
+                : "Loading..."}
+            </TooltipContent>
+          </Tooltip>
+        )}
       </div>
       <div className="flex items-center gap-2">
         <UserButton />
