@@ -20,7 +20,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { CloudCheckIcon, LoaderIcon } from "lucide-react";
+import { CloudCheckIcon, CloudOffIcon, CloudSyncIcon } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 
 const font = Poppins({
@@ -105,20 +105,22 @@ export const Navbar = ({ projectId }: { projectId: Id<"projects"> }) => {
         {project?.importStatus === "importing" ? (
           <Tooltip>
             <TooltipTrigger asChild>
-              <LoaderIcon className="size-4 text-muted-foreground animate-spin" />
+              <CloudSyncIcon className="size-4 text-muted-foreground" />
             </TooltipTrigger>
             <TooltipContent>Importing...</TooltipContent>
           </Tooltip>
         ) : (
           <Tooltip>
             <TooltipTrigger asChild>
-              <CloudCheckIcon className="size-4 text-muted-foreground" />
+              <CloudCheckIcon className="size-4 text-green-500/80" />
             </TooltipTrigger>
             <TooltipContent>
               Saved{" "}
-              {project?.updatedAt
-                ? formatDistanceToNow(project.updatedAt, { addSuffix: true })
-                : "Loading..."}
+              {project?.updatedAt ? (
+                formatDistanceToNow(project.updatedAt, { addSuffix: true })
+              ) : (
+                <CloudOffIcon className="size-4 text-muted-foreground" />
+              )}
             </TooltipContent>
           </Tooltip>
         )}
