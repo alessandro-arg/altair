@@ -1,7 +1,7 @@
 import { ChevronRightIcon } from "lucide-react";
 import { useState } from "react";
 import { FileIcon, FolderIcon } from "@react-symbols/icons/utils";
-import { getItemPadding } from "./constans";
+import { getItemPadding } from "./constants";
 
 export const CreateInput = ({
   type,

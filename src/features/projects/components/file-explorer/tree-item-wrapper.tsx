@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/context-menu";
 import { Doc } from "../../../../../convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
-import { getItemPadding } from "./constans";
+import { getItemPadding } from "./constants";
 
 export const TreeItemWrapper = ({
   item,

@@ -10,7 +10,7 @@ import { FileExplorer } from "./file-explorer";
 const MIN_SIDEBAR_WIDTH = 200;
 const MAX_SIDEBAR_WIDTH = 800;
 const DEFAULT_SIDEBAR_WIDTH = 350;
-const DEFUALT_MAIN_SIZE = 1000;
+const DEFAULT_MAIN_SIZE = 1000;
 
 const Tab = ({
   label,
@@ -64,7 +64,7 @@ export const ProjectIdView = ({ projectId }: { projectId: Id<"projects"> }) => {
             activeView === "editor" ? "visible" : "invisible",
           )}
         >
-          <Allotment defaultSizes={[DEFAULT_SIDEBAR_WIDTH, DEFUALT_MAIN_SIZE]}>
+          <Allotment defaultSizes={[DEFAULT_SIDEBAR_WIDTH, DEFAULT_MAIN_SIZE]}>
             <Allotment.Pane
               snap
               minSize={MIN_SIDEBAR_WIDTH}

@@ -12,7 +12,7 @@ import { FileIcon, FolderIcon } from "@react-symbols/icons/utils";
 import { ChevronRightIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LoadingRow } from "./loading-row";
-import { getItemPadding } from "./constans";
+import { getItemPadding } from "./constants";
 import { CreateInput } from "./create-input";
 import { RenameInput } from "./rename-input";
 

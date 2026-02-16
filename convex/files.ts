@@ -108,11 +108,11 @@ export const createFile = mutation({
       )
       .collect();
 
-    const exisisting = files.find(
+    const existing = files.find(
       (file) => file.name === args.name && file.type === "file",
     );
 
-    if (exisisting) throw new Error("File already exists");
+    if (existing) throw new Error("File already exists");
 
     await ctx.db.insert("files", {
       projectId: args.projectId,
@@ -155,11 +155,11 @@ export const createFolder = mutation({
       )
       .collect();
 
-    const exisisting = files.find(
+    const existing = files.find(
       (file) => file.name === args.name && file.type === "folder",
     );
 
-    if (exisisting) throw new Error("Folder already exists");
+    if (existing) throw new Error("Folder already exists");
 
     await ctx.db.insert("files", {
       projectId: args.projectId,

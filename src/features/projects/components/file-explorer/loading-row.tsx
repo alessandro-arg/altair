@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { getItemPadding } from "./constans";
+import { getItemPadding } from "./constants";
 import { Spinner } from "@/components/ui/spinner";
 
 export const LoadingRow = ({
@@ -11,7 +11,7 @@ export const LoadingRow = ({
 }) => {
   return (
     <div
-      className={cn("h-5.5 fle items-center text-muted-foreground", className)}
+      className={cn("h-5.5 flex items-center text-muted-foreground", className)}
       style={{ paddingLeft: getItemPadding(level, true) }}
     >
       <Spinner className="size-4 text-ring ml-0.5 mt-0.5" />
