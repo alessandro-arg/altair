@@ -10,9 +10,15 @@ import { customSetup } from "../extensions/custom-setup";
 
 interface Props {
   fileName: string;
+  initialValue?: string;
+  onChange: (value: string) => void;
 }
 
-export const CodeEditor = ({ fileName }: Props) => {
+export const CodeEditor = ({
+  fileName,
+  initialValue = "",
+  onChange,
+}: Props) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
 
@@ -24,7 +30,7 @@ export const CodeEditor = ({ fileName }: Props) => {
     if (!editorRef.current) return;
 
     const view = new EditorView({
-      doc: "Start document",
+      doc: initialValue,
       parent: editorRef.current,
       extensions: [
         oneDark,
@@ -34,6 +40,11 @@ export const CodeEditor = ({ fileName }: Props) => {
         keymap.of([indentWithTab]),
         minimap(),
         indentationMarkers(),
+        EditorView.updateListener.of((update) => {
+          if (update.docChanged) {
+            onChange(update.state.doc.toString());
+          }
+        }),
       ],
     });
 
@@ -42,7 +53,7 @@ export const CodeEditor = ({ fileName }: Props) => {
     return () => {
       view.destroy();
     };
-  }, []);
+  }, [languageExtension]);
 
   return <div ref={editorRef} className="size-full pl-4 bg-background" />;
 };
