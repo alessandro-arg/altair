@@ -38,6 +38,58 @@ class SuggestionWidget extends WidgetType {
   }
 }
 
+let debounceTimer: number | null = null;
+let isWaitingForSuggestion = false;
+const DEBOUNCE_DELAY = 300;
+
+const fakeSuggestion = (textBeforeCursor: string): string | null => {
+  const trimmed = textBeforeCursor.trimEnd();
+  if (trimmed.endsWith("const")) return " myVariable = ";
+  return null;
+};
+
+const createDebouncePlugin = (fileName: string) => {
+  return ViewPlugin.fromClass(
+    class {
+      constructor(view: EditorView) {
+        this.triggerSuggestion(view);
+      }
+
+      update(update: ViewUpdate) {
+        if (update.docChanged || update.selectionSet) {
+          this.triggerSuggestion(update.view);
+        }
+      }
+
+      triggerSuggestion(view: EditorView) {
+        if (debounceTimer !== null) {
+          clearTimeout(debounceTimer);
+        }
+
+        isWaitingForSuggestion = true;
+
+        debounceTimer = window.setTimeout(async () => {
+          const cursor = view.state.selection.main.head;
+          const line = view.state.doc.lineAt(cursor);
+          const textBeforeCursor = line.text.slice(0, cursor - line.from);
+          const suggestion = fakeSuggestion(textBeforeCursor);
+
+          isWaitingForSuggestion = false;
+          view.dispatch({
+            effects: setSuggestionEffect.of(suggestion),
+          });
+        }, DEBOUNCE_DELAY);
+      }
+
+      destroy() {
+        if (debounceTimer !== null) {
+          clearTimeout(debounceTimer);
+        }
+      }
+    },
+  );
+};
+
 const renderPlugin = ViewPlugin.fromClass(
   class {
     decorations: DecorationSet;
@@ -62,6 +114,10 @@ const renderPlugin = ViewPlugin.fromClass(
     }
 
     build(view: EditorView) {
+      if (isWaitingForSuggestion) {
+        return Decoration.none;
+      }
+
       const suggestion = view.state.field(suggestionState);
       if (!suggestion) {
         return Decoration.none;
@@ -101,6 +157,7 @@ const acceptSuggestionKeymap = keymap.of([
 
 export const suggestion = (fileName: string) => [
   suggestionState,
+  createDebouncePlugin(fileName),
   renderPlugin,
   acceptSuggestionKeymap,
 ];
