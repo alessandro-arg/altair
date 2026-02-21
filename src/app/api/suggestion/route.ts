@@ -2,6 +2,7 @@ import { generateText, Output } from "ai";
 import { NextResponse } from "next/server";
 import { z } from "zod"
 import { anthropic } from '@ai-sdk/anthropic';
+import { auth } from "@clerk/nextjs/server";
 
 const suggestionSchema = z.object({
     suggestion: z.string().describe("The code to insert at cursor, or empty string if no completion needed"),
@@ -62,6 +63,13 @@ If the instruction is unclear or cannot be applied, return the original code unc
 </instructions>`;
 
 export async function POST(request: Request) {
+    const {userId} = await auth();
+
+    if (!userId) {
+        return NextResponse.json({
+        error: "Unauthorized"}, {status: 403})
+    }
+
     try {
         const {
             fileName,
@@ -89,7 +97,7 @@ export async function POST(request: Request) {
         .replace("{lineNumber}", lineNumber.toString())
 
         const {output} = await generateText({
-            model: anthropic("claude-3-7-sonnet-20250219"),
+            model: anthropic("claude-haiku-4-5"),
             output: Output.object({schema: suggestionSchema}),
             prompt
         })
