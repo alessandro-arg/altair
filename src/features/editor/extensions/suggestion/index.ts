@@ -1,13 +1,14 @@
-import { StateEffect, StateField } from "@codemirror/state";
 import {
   Decoration,
   DecorationSet,
   EditorView,
-  keymap,
   ViewPlugin,
   ViewUpdate,
   WidgetType,
+  keymap,
 } from "@codemirror/view";
+import { StateEffect, StateField } from "@codemirror/state";
+import { fetcher } from "./fetcher";
 
 const setSuggestionEffect = StateEffect.define<string | null>();
 const suggestionState = StateField.define<string | null>({
@@ -40,16 +41,49 @@ class SuggestionWidget extends WidgetType {
 
 let debounceTimer: number | null = null;
 let isWaitingForSuggestion = false;
+let currentAbortController: AbortController | null = null;
 const DEBOUNCE_DELAY = 300;
 
-const fakeSuggestion = (textBeforeCursor: string): string | null => {
-  const trimmed = textBeforeCursor.trimEnd();
-  if (trimmed.endsWith("const")) return " myVariable = ";
-  return null;
+const generatePayload = (view: EditorView, fileName: string) => {
+  const code = view.state.doc.toString();
+
+  if (!code || code.trim().length === 0) {
+    return null;
+  }
+
+  const cursorPosition = view.state.selection.main.head;
+  const currentLine = view.state.doc.lineAt(cursorPosition);
+  const cursorInLine = cursorPosition - currentLine.from;
+
+  const previousLines: string[] = [];
+  const previousLinesToFetch = Math.min(5, currentLine.number - 1);
+
+  for (let i = previousLinesToFetch; i >= 1; i--) {
+    previousLines.push(view.state.doc.line(currentLine.number - i).text);
+  }
+
+  const nextLines: string[] = [];
+  const totalLines = view.state.doc.lines;
+  const linesToFetch = Math.min(5, totalLines - currentLine.number);
+
+  for (let i = 1; i <= linesToFetch; i++) {
+    nextLines.push(view.state.doc.line(currentLine.number + i).text);
+  }
+
+  return {
+    fileName,
+    code,
+    currentLine: currentLine.text,
+    previousLines: previousLines.join("\n"),
+    textBeforeCursor: currentLine.text.slice(0, cursorInLine),
+    textAfterCursor: currentLine.text.slice(cursorInLine),
+    nextLines: nextLines.join("\n"),
+    lineNumber: currentLine.number,
+  };
 };
 
-const createDebouncePlugin = (fileName: string) => {
-  return ViewPlugin.fromClass(
+const createDebouncePlugin = (fileName: string) =>
+  ViewPlugin.fromClass(
     class {
       constructor(view: EditorView) {
         this.triggerSuggestion(view);
@@ -66,14 +100,28 @@ const createDebouncePlugin = (fileName: string) => {
           clearTimeout(debounceTimer);
         }
 
+        if (currentAbortController !== null) {
+          currentAbortController.abort();
+        }
+
         isWaitingForSuggestion = true;
 
         debounceTimer = window.setTimeout(async () => {
-          const cursor = view.state.selection.main.head;
-          const line = view.state.doc.lineAt(cursor);
-          const textBeforeCursor = line.text.slice(0, cursor - line.from);
-          const suggestion = fakeSuggestion(textBeforeCursor);
+          const payload = generatePayload(view, fileName);
 
+          if (!payload) {
+            isWaitingForSuggestion = false;
+            view.dispatch({
+              effects: setSuggestionEffect.of(null),
+            });
+            return;
+          }
+
+          currentAbortController = new AbortController();
+          const suggestion = await fetcher(
+            payload,
+            currentAbortController.signal
+          );
           isWaitingForSuggestion = false;
           view.dispatch({
             effects: setSuggestionEffect.of(suggestion),
@@ -85,10 +133,12 @@ const createDebouncePlugin = (fileName: string) => {
         if (debounceTimer !== null) {
           clearTimeout(debounceTimer);
         }
+        if (currentAbortController !== null) {
+          currentAbortController.abort();
+        }
       }
-    },
+    }
   );
-};
 
 const renderPlugin = ViewPlugin.fromClass(
   class {
@@ -99,14 +149,12 @@ const renderPlugin = ViewPlugin.fromClass(
     }
 
     update(update: ViewUpdate) {
-      const suggestionChanged = update.transactions.some((transaction) => {
-        return transaction.effects.some((effect) => {
-          return effect.is(setSuggestionEffect);
-        });
-      });
-
-      const shouldRebuild =
-        update.docChanged || update.selectionSet || suggestionChanged;
+      const docChanged = update.docChanged;
+      const cursorMoved = update.selectionSet;
+      const suggestionChanged = update.transactions.some((transaction) =>
+        transaction.effects.some((effect) => effect.is(setSuggestionEffect))
+      );
+      const shouldRebuild = docChanged || cursorMoved || suggestionChanged;
 
       if (shouldRebuild) {
         this.decorations = this.build(update.view);
@@ -132,7 +180,7 @@ const renderPlugin = ViewPlugin.fromClass(
       ]);
     }
   },
-  { decorations: (plugin) => plugin.decorations },
+  { decorations: (plugin) => plugin.decorations }
 );
 
 const acceptSuggestionKeymap = keymap.of([
