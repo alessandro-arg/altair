@@ -95,7 +95,7 @@ const createQuickEditTooltip = (state: EditorState): readonly Tooltip[] => {
 
           const selection = editorView.state.selection.main;
           const selectedCode = editorView.state.doc.sliceString(
-            selection.form,
+            selection.from,
             selection.to,
           );
           const fullCode = editorView.state.doc.toString();
@@ -114,7 +114,7 @@ const createQuickEditTooltip = (state: EditorState): readonly Tooltip[] => {
           );
 
           if (editedCode) {
-            editedCode.dispatch({
+            editorView.dispatch({
               changes: {
                 from: selection.from,
                 to: selection.to,
@@ -156,7 +156,7 @@ const quickEditTooltipField = StateField.define<readonly Tooltip[]>({
 
   update(tooltips, transaction) {
     if (transaction.docChanged || transaction.selection) {
-      return createQuickEditTooltip(transaction.startState);
+      return createQuickEditTooltip(transaction.state);
     }
 
     for (const effect of transaction.effects) {
@@ -170,7 +170,30 @@ const quickEditTooltipField = StateField.define<readonly Tooltip[]>({
     showTooltip.computeN([field], (state) => state.field(field)),
 });
 
+const quickEditKeymap = keymap.of([
+  {
+    key: "Mod-k",
+    run: (view) => {
+      const selection = view.state.selection.main;
+      if (selection.empty) {
+        return false;
+      }
+
+      view.dispatch({
+        effects: showQuickEditEffect.of(true),
+      });
+      return true;
+    },
+  },
+]);
+
+const captureViewExtension = EditorView.updateListener.of((update) => {
+  editorView = update.view;
+});
+
 export const quickEdit = (fileName: string) => [
   quickEditState,
   quickEditTooltipField,
+  quickEditKeymap,
+  captureViewExtension,
 ];
