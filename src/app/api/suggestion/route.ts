@@ -50,7 +50,7 @@ export async function POST(request: Request) {
       {
         error: "Unauthorized",
       },
-      { status: 403 },
+      { status: 401 },
     );
   }
 

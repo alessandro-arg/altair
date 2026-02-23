@@ -5,7 +5,7 @@ import { generateText, Output } from "ai";
 import { NextResponse } from "next/server";
 import z from "zod";
 
-const quikEditSchema = z.object({
+const quickEditSchema = z.object({
   editedCode: z
     .string()
     .describe(
@@ -45,7 +45,7 @@ export async function POST(request: Request) {
     const { selectedCode, fullCode, instruction } = await request.json();
 
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 400 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     if (!selectedCode) {
@@ -98,7 +98,7 @@ export async function POST(request: Request) {
 
     const { output } = await generateText({
       model: anthropic("claude-haiku-4-5"),
-      output: Output.object({ schema: quikEditSchema }),
+      output: Output.object({ schema: quickEditSchema }),
       prompt,
     });
 
