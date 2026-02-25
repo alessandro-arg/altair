@@ -40,6 +40,7 @@ export const EditorView = ({ projectId }: { projectId: Id<"projects"> }) => {
               alt="altair"
               width={50}
               height={50}
+              loading="eager"
               className="opacity-25 w-12.5 h-12.5"
             />
           </div>
