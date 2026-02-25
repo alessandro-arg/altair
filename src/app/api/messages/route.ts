@@ -1,9 +1,10 @@
 import { convex } from "@/lib/convex-client";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import z from "zod";
+import z, { success } from "zod";
 import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
+import { inngest } from "@/inngest/client";
 
 const requestSchema = z.object({
   conversationId: z.string(),
@@ -39,5 +40,48 @@ export async function POST(request: Request) {
   const conversation = await convex.query(api.system.getConversationById, {
     internalKey,
     conversationId: conversationId as Id<"conversations">,
+  });
+
+  if (!conversation) {
+    return NextResponse.json(
+      {
+        error: "Conversation not found",
+      },
+      {
+        status: 404,
+      },
+    );
+  }
+
+  const projectId = conversation.projectId;
+
+  await convex.mutation(api.system.createMessage, {
+    internalKey,
+    conversationId: conversationId as Id<"conversations">,
+    projectId,
+    role: "user",
+    content: message,
+  });
+
+  const assistantMessageId = await convex.mutation(api.system.createMessage, {
+    internalKey,
+    conversationId: conversationId as Id<"conversations">,
+    projectId,
+    role: "assistant",
+    content: "",
+    status: "processing",
+  });
+
+  const event = inngest.send({
+    name: "message/sent",
+    data: {
+      messageId: assistantMessageId,
+    },
+  });
+
+  return NextResponse.json({
+    success: true,
+    eventId: (await event).ids[0],
+    messageId: assistantMessageId,
   });
 }
