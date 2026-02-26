@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Id } from "../../../../convex/_generated/dataModel";
-import { DEFAULT_CONVERSATION_TITLE } from "../../../../convex/constants";
+import { DEFAULT_CONVERSATION_TITLE } from "../constants";
 import { CopyIcon, HistoryIcon, Loader2Icon, PlusIcon } from "lucide-react";
 import {
   Conversation,
