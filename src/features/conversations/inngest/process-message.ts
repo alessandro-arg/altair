@@ -9,6 +9,7 @@ import {
   TITLE_GENERATOR_SYSTEM_PROMPT,
 } from "./constants";
 import { DEFAULT_CONVERSATION_TITLE } from "../constants";
+import { createReadFilesTool } from "./tools/read-files";
 
 interface MessageEvent {
   messageId: Id<"messages">;
@@ -134,6 +135,20 @@ export const processMessage = inngest.createFunction(
         }
       }
     }
+
+    const codingAgent = createAgent({
+      name: "altair",
+      description: "An expert AI coding assistant",
+      system: systemPrompt,
+      model: anthropic({
+        model: "claude-opus-4-20250514",
+        defaultParameters: {
+          temperature: 0.3,
+          max_tokens: 16000,
+        },
+      }),
+      tools: [createReadFilesTool({ internalKey })],
+    });
 
     await step.run("update-assistant-message", async () => {
       await convex.mutation(api.system.updateMessageContent, {
