@@ -3,13 +3,14 @@ import { Id } from "../../../../convex/_generated/dataModel";
 import { NonRetriableError } from "inngest";
 import { convex } from "@/lib/convex-client";
 import { api } from "../../../../convex/_generated/api";
-import { createAgent, anthropic } from "@inngest/agent-kit";
+import { createAgent, anthropic, createNetwork } from "@inngest/agent-kit";
 import {
   CODING_AGENT_SYSTEM_PROMPT,
   TITLE_GENERATOR_SYSTEM_PROMPT,
 } from "./constants";
 import { DEFAULT_CONVERSATION_TITLE } from "../constants";
 import { createReadFilesTool } from "./tools/read-files";
+import { createListFilesTool } from "./tools/list-files";
 
 interface MessageEvent {
   messageId: Id<"messages">;
@@ -147,15 +148,57 @@ export const processMessage = inngest.createFunction(
           max_tokens: 16000,
         },
       }),
-      tools: [createReadFilesTool({ internalKey })],
+      tools: [
+        createListFilesTool({ internalKey, projectId }),
+        createReadFilesTool({ internalKey }),
+      ],
     });
+
+    const network = createNetwork({
+      name: "altair-network",
+      agents: [codingAgent],
+      maxIter: 20,
+      router: ({ network }) => {
+        const lastResult = network.state.results.at(-1);
+        const hasTextResponse = lastResult?.output.some(
+          (m) => m.type === "text" && m.role === "assistant",
+        );
+        const hasToolCalls = lastResult?.output.some(
+          (m) => m.type === "tool_call",
+        );
+
+        if (hasTextResponse && !hasToolCalls) {
+          return undefined;
+        }
+        return codingAgent;
+      },
+    });
+
+    const result = await network.run(message);
+
+    const lastResult = result.state.results.at(-1);
+    const textMessage = lastResult?.output.find(
+      (m) => m.type === "text" && m.role === "assistant",
+    );
+
+    let assistantResponse =
+      "I processed your request. Let me know if you need anything else!";
+
+    if (textMessage?.type === "text") {
+      assistantResponse =
+        typeof textMessage.content === "string"
+          ? textMessage.content
+          : textMessage.content.map((c) => c.text).join("");
+    }
 
     await step.run("update-assistant-message", async () => {
       await convex.mutation(api.system.updateMessageContent, {
         internalKey,
         messageId,
-        content: "AI processed this message",
+        content: assistantResponse,
       });
     });
+
+    return { success: true, messageId, conversationId };
   },
 );
