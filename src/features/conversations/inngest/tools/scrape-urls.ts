@@ -5,6 +5,7 @@ import { z } from "zod";
 const paramsSchema = z.object({
   urls: z
     .array(z.url("Invalid URL format"))
+    .max(10, "You can scrape up to 10 URLs per request")
     .min(1, "Provide at least one URL to scrape"),
 });
 
