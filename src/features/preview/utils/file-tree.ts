@@ -3,7 +3,7 @@ import { Doc, Id } from "../../../../convex/_generated/dataModel";
 
 type FileDoc = Doc<"files">;
 
-export const buildTreeFile = (files: FileDoc[]): FileSystemTree => {
+export const buildFileTree = (files: FileDoc[]): FileSystemTree => {
   const tree: FileSystemTree = {};
   const filesMap = new Map(files.map((f) => [f._id, f]));
 
