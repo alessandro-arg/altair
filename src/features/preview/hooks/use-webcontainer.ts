@@ -1,9 +1,13 @@
-import { WebContainer } from "@webcontainer/api";
-import { Id } from "../../../../convex/_generated/dataModel";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useFiles } from "@/features/projects/hooks/use-files";
-import { buildFileTree, getFilePath } from "../utils/file-tree";
+import { WebContainer } from "@webcontainer/api";
 
+import { buildFileTree, getFilePath } from "@/features/preview/utils/file-tree";
+import { useFiles } from "@/features/projects/hooks/use-files";
+
+import { api } from "../../../../convex/_generated/api";
+import { Id } from "../../../../convex/_generated/dataModel";
+
+// Singleton WebContainer instance
 let webcontainerInstance: WebContainer | null = null;
 let bootPromise: Promise<WebContainer> | null = null;
 
@@ -53,8 +57,10 @@ export const useWebContainer = ({
   const containerRef = useRef<WebContainer | null>(null);
   const hasStartedRef = useRef(false);
 
+  // Fetch files from Convex (auto-updates on changes)
   const files = useFiles(projectId);
 
+  // Initial boot and mount
   useEffect(() => {
     if (!enabled || !files || files.length === 0 || hasStartedRef.current) {
       return;
@@ -85,6 +91,7 @@ export const useWebContainer = ({
 
         setStatus("installing");
 
+        // Parse install command (default: npm install)
         const installCmd = settings?.installCommand || "npm install";
         const [installBin, ...installArgs] = installCmd.split(" ");
         appendOutput(`$ ${installCmd}\n`);
@@ -96,13 +103,13 @@ export const useWebContainer = ({
             },
           }),
         );
-
         const installExitCode = await installProcess.exit;
 
         if (installExitCode !== 0) {
           throw new Error(`${installCmd} failed with code ${installExitCode}`);
         }
 
+        // Parse dev command (default: npm run dev)
         const devCmd = settings?.devCommand || "npm run dev";
         const [devBin, ...devArgs] = devCmd.split(" ");
         appendOutput(`\n$ ${devCmd}\n`);
@@ -129,24 +136,22 @@ export const useWebContainer = ({
     settings?.installCommand,
   ]);
 
+  // Sync file changes (hot-reload)
   useEffect(() => {
     const container = containerRef.current;
-    if (!container || !files || status !== "running") {
-      return;
-    }
+    if (!container || !files || status !== "running") return;
 
     const filesMap = new Map(files.map((f) => [f._id, f]));
 
     for (const file of files) {
-      if (file.type !== "file" || file.storageId || !file.content) {
-        continue;
-      }
+      if (file.type !== "file" || file.storageId || !file.content) continue;
 
       const filePath = getFilePath(file, filesMap);
       container.fs.writeFile(filePath, file.content);
     }
   }, [files, status]);
 
+  // Reset when disabled
   useEffect(() => {
     if (!enabled) {
       hasStartedRef.current = false;
@@ -156,6 +161,7 @@ export const useWebContainer = ({
     }
   }, [enabled]);
 
+  // Restart the entire WebContainer process
   const restart = useCallback(() => {
     teardownWebContainer();
     containerRef.current = null;

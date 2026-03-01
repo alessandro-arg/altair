@@ -1,19 +1,22 @@
 "use client";
 
 import { z } from "zod";
-import { Doc, Id } from "../../../../convex/_generated/dataModel";
 import { useState } from "react";
 import { useForm } from "@tanstack/react-form";
+import { SettingsIcon } from "lucide-react";
+
 import { useUpdateProjectSettings } from "@/features/projects/hooks/use-projects";
+
+import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { SettingsIcon } from "lucide-react";
-import { Field, FieldLabel, FieldDescription } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Field, FieldLabel, FieldDescription } from "@/components/ui/field";
+
+import { Doc, Id } from "../../../../convex/_generated/dataModel";
 
 const formSchema = z.object({
   installCommand: z.string(),
@@ -62,7 +65,6 @@ export const PreviewSettingsPopover = ({
         devCommand: initialValues?.devCommand ?? "",
       });
     }
-
     setOpen(isOpen);
   };
 
@@ -87,7 +89,7 @@ export const PreviewSettingsPopover = ({
         >
           <div className="space-y-4">
             <div className="space-y-1">
-              <h4 className="font-medium text-sm">Preview settings</h4>
+              <h4 className="font-medium text-sm">Preview Settings</h4>
               <p className="text-xs text-muted-foreground">
                 Configure how your project runs in the preview.
               </p>

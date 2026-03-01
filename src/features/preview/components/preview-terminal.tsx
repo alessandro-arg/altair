@@ -1,9 +1,10 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
+
 import "@xterm/xterm/css/xterm.css";
-import { useEffect, useRef } from "react";
 
 interface PreviewTerminalProps {
   output: string;
@@ -13,12 +14,11 @@ export const PreviewTerminal = ({ output }: PreviewTerminalProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const terminalRef = useRef<Terminal | null>(null);
   const fitAddonRef = useRef<FitAddon | null>(null);
-  const lastLenghtRef = useRef(0);
+  const lastLengthRef = useRef(0);
 
+  // Initialize terminal
   useEffect(() => {
-    if (!containerRef.current || terminalRef.current) {
-      return;
-    }
+    if (!containerRef.current || terminalRef.current) return;
 
     const terminal = new Terminal({
       convertEol: true,
@@ -35,9 +35,10 @@ export const PreviewTerminal = ({ output }: PreviewTerminalProps) => {
     terminalRef.current = terminal;
     fitAddonRef.current = fitAddon;
 
+    // Write existing output on mount
     if (output) {
       terminal.write(output);
-      lastLenghtRef.current = output.length;
+      lastLengthRef.current = output.length;
     }
 
     requestAnimationFrame(() => fitAddon.fit());
@@ -51,23 +52,23 @@ export const PreviewTerminal = ({ output }: PreviewTerminalProps) => {
       terminalRef.current = null;
       fitAddonRef.current = null;
     };
+    // "output" does not need to be a dependency since it is not intended
+    // to update anything, just used on mount
   }, []);
 
+  // Write output
   useEffect(() => {
-    if (!terminalRef.current) {
-      return;
-    }
+    if (!terminalRef.current) return;
 
-    if (output.length < lastLenghtRef.current) {
+    if (output.length < lastLengthRef.current) {
       terminalRef.current.clear();
-      lastLenghtRef.current = 0;
+      lastLengthRef.current = 0;
     }
 
-    const newData = output.slice(lastLenghtRef.current);
-
+    const newData = output.slice(lastLengthRef.current);
     if (newData) {
       terminalRef.current.write(newData);
-      lastLenghtRef.current = output.length;
+      lastLengthRef.current = output.length;
     }
   }, [output]);
 

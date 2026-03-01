@@ -1,19 +1,23 @@
 "use client";
 
 import { useState } from "react";
-import { Id } from "../../../../convex/_generated/dataModel";
-import { useProject } from "../hooks/use-projects";
-import { useWebContainer } from "@/features/preview/hooks/use-webcontainer";
-import { Button } from "@/components/ui/button";
-import {
-  AlertTriangleIcon,
-  Loader2Icon,
-  RefreshCcwIcon,
-  TerminalSquareIcon,
-} from "lucide-react";
-import { PreviewSettingsPopover } from "@/features/preview/components/preview-settings-popover";
 import { Allotment } from "allotment";
+import {
+  Loader2Icon,
+  TerminalSquareIcon,
+  AlertTriangleIcon,
+  RefreshCwIcon,
+} from "lucide-react";
+
+import { useWebContainer } from "@/features/preview/hooks/use-webcontainer";
+import { PreviewSettingsPopover } from "@/features/preview/components/preview-settings-popover";
 import { PreviewTerminal } from "@/features/preview/components/preview-terminal";
+
+import { Button } from "@/components/ui/button";
+
+import { useProject } from "../hooks/use-projects";
+
+import { Id } from "../../../../convex/_generated/dataModel";
 
 export const PreviewView = ({ projectId }: { projectId: Id<"projects"> }) => {
   const project = useProject(projectId);
@@ -39,7 +43,7 @@ export const PreviewView = ({ projectId }: { projectId: Id<"projects"> }) => {
           onClick={restart}
           title="Restart container"
         >
-          <RefreshCcwIcon className="size-3" />
+          <RefreshCwIcon className="size-3" />
         </Button>
 
         <div className="flex-1 h-full flex items-center px-3 bg-background border-x text-xs text-muted-foreground truncate font-mono">
@@ -62,7 +66,6 @@ export const PreviewView = ({ projectId }: { projectId: Id<"projects"> }) => {
         >
           <TerminalSquareIcon className="size-3" />
         </Button>
-
         <PreviewSettingsPopover
           projectId={projectId}
           initialValues={project?.settings}
@@ -79,7 +82,7 @@ export const PreviewView = ({ projectId }: { projectId: Id<"projects"> }) => {
                   <AlertTriangleIcon className="size-6" />
                   <p className="text-sm font-medium">{error}</p>
                   <Button size="sm" variant="outline" onClick={restart}>
-                    <RefreshCcwIcon className="size-4" />
+                    <RefreshCwIcon className="size-4" />
                     Restart
                   </Button>
                 </div>
