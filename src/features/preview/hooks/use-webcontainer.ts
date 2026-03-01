@@ -67,9 +67,11 @@ export const useWebContainer = ({
     }
 
     hasStartedRef.current = true;
+    let cancelled = false;
 
     const start = async () => {
       try {
+        if (cancelled) return;
         setStatus("booting");
         setError(null);
         setTerminalOutput("");
@@ -79,12 +81,15 @@ export const useWebContainer = ({
         };
 
         const container = await getWebContainer();
+        if (cancelled) return;
         containerRef.current = container;
 
         const fileTree = buildFileTree(files);
         await container.mount(fileTree);
+        if (cancelled) return;
 
         container.on("server-ready", (_port, url) => {
+          if (cancelled) return;
           setPreviewUrl(url);
           setStatus("running");
         });
@@ -96,6 +101,7 @@ export const useWebContainer = ({
         const [installBin, ...installArgs] = installCmd.split(" ");
         appendOutput(`$ ${installCmd}\n`);
         const installProcess = await container.spawn(installBin, installArgs);
+        if (cancelled) return;
         installProcess.output.pipeTo(
           new WritableStream({
             write(data) {
@@ -114,6 +120,7 @@ export const useWebContainer = ({
         const [devBin, ...devArgs] = devCmd.split(" ");
         appendOutput(`\n$ ${devCmd}\n`);
         const devProcess = await container.spawn(devBin, devArgs);
+        if (cancelled) return;
         devProcess.output.pipeTo(
           new WritableStream({
             write(data) {
@@ -122,12 +129,16 @@ export const useWebContainer = ({
           }),
         );
       } catch (error) {
+        if (cancelled) return;
         setError(error instanceof Error ? error.message : "Unknown error");
         setStatus("error");
       }
     };
 
     start();
+    return () => {
+      cancelled = true;
+    };
   }, [
     enabled,
     files,
@@ -154,10 +165,13 @@ export const useWebContainer = ({
   // Reset when disabled
   useEffect(() => {
     if (!enabled) {
+      teardownWebContainer();
+      containerRef.current = null;
       hasStartedRef.current = false;
       setStatus("idle");
       setPreviewUrl(null);
       setError(null);
+      setTerminalOutput("");
     }
   }, [enabled]);
 

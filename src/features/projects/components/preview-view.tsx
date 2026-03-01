@@ -42,6 +42,7 @@ export const PreviewView = ({ projectId }: { projectId: Id<"projects"> }) => {
           disabled={isLoading}
           onClick={restart}
           title="Restart container"
+          aria-label="Restart container"
         >
           <RefreshCwIcon className="size-3" />
         </Button>
@@ -63,6 +64,8 @@ export const PreviewView = ({ projectId }: { projectId: Id<"projects"> }) => {
           className="h-full rounded-none"
           title="Toggle terminal"
           onClick={() => setShowTerminal((value) => !value)}
+          aria-label="Toggle terminal"
+          aria-pressed={showTerminal}
         >
           <TerminalSquareIcon className="size-3" />
         </Button>
