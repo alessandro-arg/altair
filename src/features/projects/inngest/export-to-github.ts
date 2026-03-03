@@ -4,6 +4,7 @@ import { convex } from "@/lib/convex-client";
 import { api } from "../../../../convex/_generated/api";
 import { NonRetriableError } from "inngest";
 import { Octokit } from "octokit";
+import ky from "ky";
 
 interface ExportToGithubEvent {
   projectId: Id<"projects">;
@@ -142,7 +143,81 @@ export const exportToGithub = inngest.createFunction(
       for (const [path, file] of fileEntries) {
         let content: string;
         let encoding: "utf-8" | "base64" = "utf-8";
+
+        if (file.content !== undefined) {
+          content = file.content;
+        } else if (file.storageUrl) {
+          const response = await ky.get(file.storageUrl);
+          const buffer = Buffer.from(await response.arrayBuffer());
+          content = buffer.toString("base64");
+          encoding = "base64";
+        } else {
+          continue;
+        }
+
+        const { data: blob } = await octokit.rest.git.createBlob({
+          owner: user.login,
+          repo: repoName,
+          content,
+          encoding,
+        });
+
+        items.push({
+          path,
+          mode: "100644",
+          type: "blob",
+          sha: blob.sha,
+        });
       }
+
+      return items;
     });
+
+    if (treeItems.length === 0) {
+      throw new NonRetriableError("Failed to create any file blobs");
+    }
+
+    const { data: tree } = await step.run("create-tree", async () => {
+      return await octokit.rest.git.createTree({
+        owner: user.login,
+        repo: repoName,
+        tree: treeItems,
+      });
+    });
+
+    const { data: commit } = await step.run("create-commit", async () => {
+      return await octokit.rest.git.createCommit({
+        owner: user.login,
+        repo: repoName,
+        message: "Initial commit from Altair",
+        tree: tree.sha,
+        parents: [initialCommitSha],
+      });
+    });
+
+    await step.run("update-branch-ref", async () => {
+      return await octokit.rest.git.updateRef({
+        owner: user.login,
+        repo: repo.name,
+        ref: "heads/main",
+        sha: commit.sha,
+        force: true,
+      });
+    });
+
+    await step.run("set-completed-status", async () => {
+      await convex.mutation(api.system.updateExportStatus, {
+        internalKey,
+        projectId,
+        status: "completed",
+        repoUrl: repo.html_url,
+      });
+    });
+
+    return {
+      success: true,
+      repoUrl: repo.html_url,
+      filesExported: treeItems.length,
+    };
   },
 );
