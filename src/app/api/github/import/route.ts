@@ -12,7 +12,7 @@ const requestSchema = z.object({
 function parseGitHubUrl(url: string) {
   const match = url.match(/github\.com\/([^/]+)\/([^/]+)/);
   if (!match) {
-    throw new Error("Invalid Github URL");
+    throw new Error("Invalid GitHub URL");
   }
 
   return { owner: match[1], repo: match[2].replace(/\.git$/, "") };
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
   if (!githubToken) {
     return NextResponse.json(
       {
-        error: "Github not connected. Please reconnect your Github account.",
+        error: "GitHub not connected. Please reconnect your GitHub account.",
       },
       { status: 400 },
     );
