@@ -1,18 +1,9 @@
 import { useClerk } from "@clerk/nextjs";
 import { useForm } from "@tanstack/react-form";
 import ky, { HTTPError } from "ky";
-import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { Id } from "../../../../convex/_generated/dataModel";
 import { toast } from "sonner";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -86,7 +77,7 @@ export const ExportPopover = ({ projectId }: ExportPopoverProps) => {
           },
         });
 
-        toast.success("Exporting repository...");
+        toast.info("Exporting repository...");
       } catch (error) {
         if (error instanceof HTTPError) {
           const body = await error.response.json<{ error: string }>();
@@ -108,16 +99,25 @@ export const ExportPopover = ({ projectId }: ExportPopoverProps) => {
   });
 
   const handleCancelExport = async () => {
-    await ky.post("/api/github/export/cancel", {
-      json: { projectId },
-    });
+    try {
+      await ky.post("/api/github/export/cancel", {
+        json: { projectId },
+      });
+      toast.info("Export cancelled");
+    } catch {
+      toast.error("Unable to cancel export");
+    }
   };
 
   const handleResetExport = async () => {
-    await ky.post("/api/github/export/reset", {
-      json: { projectId },
-    });
-    setOpen(false);
+    try {
+      await ky.post("/api/github/export/reset", {
+        json: { projectId },
+      });
+      setOpen(false);
+    } catch {
+      toast.error("Unable to reset export state");
+    }
   };
 
   const renderContent = () => {

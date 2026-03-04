@@ -469,6 +469,10 @@ export const createBinaryFile = mutation({
       (file) => file.name === args.name && file.type === "file",
     );
 
+    if (existing) {
+      throw new Error("File already exists");
+    }
+
     const fileId = await ctx.db.insert("files", {
       projectId: args.projectId,
       name: args.name,

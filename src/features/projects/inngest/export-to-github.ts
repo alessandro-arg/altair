@@ -79,11 +79,13 @@ export const exportToGithub = inngest.createFunction(
 
     await step.sleep("wait-for-repo-init", "5s");
 
+    const defaultBranch = repo.default_branch || "main";
+
     const initialCommitSha = await step.run("get-initial-commit", async () => {
       const { data: ref } = await octokit.rest.git.getRef({
         owner: user.login,
         repo: repoName,
-        ref: "heads/main",
+        ref: `heads/${defaultBranch}`,
       });
 
       return ref.object.sha;
@@ -199,7 +201,7 @@ export const exportToGithub = inngest.createFunction(
       return await octokit.rest.git.updateRef({
         owner: user.login,
         repo: repo.name,
-        ref: "heads/main",
+        ref: `heads/${defaultBranch}`,
         sha: commit.sha,
         force: true,
       });
