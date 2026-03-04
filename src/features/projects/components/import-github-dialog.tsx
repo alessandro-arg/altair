@@ -110,7 +110,7 @@ export const ImportGithubDialog = ({
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
                     aria-invalid={isInvalid}
-                    placeholder="https://github.com/OWNER/REPO"
+                    placeholder="https://github.com/owner/repo"
                   />
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </Field>
