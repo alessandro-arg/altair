@@ -35,9 +35,10 @@ export const NewProjectDialog = ({
   const router = useRouter();
   const [input, setInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const trimmedInput = input.trim();
 
   const handleSubmit = async (message: PromptInputMessage) => {
-    if (!message.text) {
+    if (!message.text.trim()) {
       return;
     }
 
@@ -64,7 +65,7 @@ export const NewProjectDialog = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent showCloseButton={false} className="sm:max-w-lg p-0">
-        <DialogHeader className="hidden">
+        <DialogHeader className="sr-only">
           <DialogTitle>What do you want to build?</DialogTitle>
           <DialogDescription>
             Describe your project and AI will help you create it.
@@ -81,7 +82,7 @@ export const NewProjectDialog = ({
           </PromptInputBody>
           <PromptInputFooter>
             <PromptInputTools />
-            <PromptInputSubmit disabled={!input || isSubmitting} />
+            <PromptInputSubmit disabled={!trimmedInput || isSubmitting} />
           </PromptInputFooter>
         </PromptInput>
       </DialogContent>

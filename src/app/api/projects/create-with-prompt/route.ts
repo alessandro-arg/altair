@@ -71,15 +71,31 @@ export async function POST(request: Request) {
     status: "processing",
   });
 
-  await inngest.send({
-    name: "message/sent",
-    data: {
+  try {
+    await inngest.send({
+      name: "message/sent",
+      data: {
+        messageId: assistantMessageId,
+        conversationId,
+        projectId,
+        message: prompt,
+      },
+    });
+  } catch {
+    await convex.mutation(api.system.updateMessageStatus, {
+      internalKey,
       messageId: assistantMessageId,
-      conversationId,
-      projectId,
-      message: prompt,
-    },
-  });
+      status: "cancelled",
+    });
+
+    return NextResponse.json(
+      {
+        projectId,
+        warning: "Project created, but prompt processing could not be queued.",
+      },
+      { status: 201 },
+    );
+  }
 
   return NextResponse.json({ projectId });
 }
