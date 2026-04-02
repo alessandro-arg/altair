@@ -13,11 +13,14 @@ import {
   SparklesIcon,
   ArrowRightIcon,
   CheckIcon,
-  GlobeIcon,
   ShieldCheckIcon,
-  RocketIcon,
-  ChevronRightIcon,
 } from "lucide-react";
+import Integrations from "@/components/integrations-1";
+import FooterSection from "@/components/footer";
+import { BorderBeam } from "@/components/ui/border-beam";
+import { motion, AnimatePresence } from "motion/react";
+import Image from "next/image";
+import HeroSection from "@/components/hero-section";
 
 // ─── Navbar ──────────────────────────────────────────────────────────────────
 
@@ -331,17 +334,33 @@ const HowItWorks = () => (
         </div>
 
         {/* Right: placeholder visual */}
-        <div className="rounded-xl border border-white/8 bg-[oklch(0.25_0.012_264.34)] overflow-hidden aspect-4/3 flex items-center justify-center relative">
-          <div
-            aria-hidden
-            className="absolute inset-0 bg-linear-to-br from-[oklch(0.6562_0.1826_262.74)]/5 to-transparent"
-          />
-          <div className="text-center space-y-3 relative">
-            <div className="size-12 rounded-xl bg-white/5 border border-white/8 flex items-center justify-center mx-auto">
-              <RocketIcon className="size-6 text-white/20" />
-            </div>
-            <p className="text-white/20 text-sm">Product screenshot</p>
+        <div className="bg-background relative flex overflow-hidden rounded-3xl border p-2">
+          <div className="w-15 absolute inset-0 right-0 ml-auto border-l bg-[repeating-linear-gradient(-45deg,var(--color-border),var(--color-border)_1px,transparent_1px,transparent_8px)]"></div>
+          <div className="aspect-4/3 bg-background relative w-[calc(3/4*100%+3rem)] rounded-2xl">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key="image-id"
+                initial={{ opacity: 0, y: 6, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 6, scale: 0.98 }}
+                transition={{ duration: 0.2 }}
+                className="size-full overflow-hidden rounded-2xl border bg-zinc-900 shadow-md"
+              >
+                <Image
+                  src="/logo.png"
+                  className="size-full object-cover object-top-left dark:mix-blend-lighten"
+                  alt="altair image"
+                  width={1207}
+                  height={929}
+                />
+              </motion.div>
+            </AnimatePresence>
           </div>
+          <BorderBeam
+            duration={6}
+            size={200}
+            className="from-transparent via-yellow-700 to-transparent dark:via-white/50"
+          />
         </div>
       </div>
     </div>
@@ -474,6 +493,98 @@ const Pricing = () => (
   </section>
 );
 
+// ─── Contact ──────────────────────────────────────────────────────────────────
+
+const Contact = () => (
+  <section id="contact" className="py-24 px-4 sm:px-6 border-t border-white/6">
+    <div className="mx-auto max-w-5xl">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+        {/* Left: info */}
+        <div>
+          <Badge
+            variant="outline"
+            className="mb-4 border-white/10 bg-white/5 text-white/50 text-xs"
+          >
+            Contact
+          </Badge>
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white mb-4">
+            Get in touch
+          </h2>
+          <p className="text-white/40 text-sm leading-relaxed mb-10 max-w-sm">
+            Have questions? We'd love to hear from you. Send us a message and
+            we'll respond as soon as possible.
+          </p>
+
+          <div className="space-y-7">
+            {[
+              { label: "Email", value: "hello@altair.app" },
+              { label: "Phone", value: "+1 (234) 567-890" },
+              {
+                label: "Office",
+                value: "123 Main Street, San Francisco, CA 94102",
+              },
+            ].map((item) => (
+              <div key={item.label}>
+                <p className="text-xs font-semibold text-white mb-1">
+                  {item.label}
+                </p>
+                <p className="text-white/40 text-sm">{item.value}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right: form */}
+        <div className="rounded-xl border border-white/[0.07] bg-[oklch(0.25_0.012_264.34)] p-6 sm:p-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-white/60">Name</label>
+              <input
+                type="text"
+                placeholder="Your name"
+                className="w-full h-9 rounded-lg border border-white/8 bg-white/5 px-3 text-sm text-white placeholder:text-white/20 focus:outline-none focus:ring-1 focus:ring-[oklch(0.6562_0.1826_262.74)]/50 focus:border-[oklch(0.6562_0.1826_262.74)]/40 transition-all"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-white/60">Email</label>
+              <input
+                type="email"
+                placeholder="you@example.com"
+                className="w-full h-9 rounded-lg border border-white/8 bg-white/5 px-3 text-sm text-white placeholder:text-white/20 focus:outline-none focus:ring-1 focus:ring-[oklch(0.6562_0.1826_262.74)]/50 focus:border-[oklch(0.6562_0.1826_262.74)]/40 transition-all"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1.5 mb-4">
+            <label className="text-xs font-medium text-white/60">Subject</label>
+            <input
+              type="text"
+              placeholder="How can we help?"
+              className="w-full h-9 rounded-lg border border-white/8 bg-white/5 px-3 text-sm text-white placeholder:text-white/20 focus:outline-none focus:ring-1 focus:ring-[oklch(0.6562_0.1826_262.74)]/50 focus:border-[oklch(0.6562_0.1826_262.74)]/40 transition-all"
+            />
+          </div>
+
+          <div className="space-y-1.5 mb-6">
+            <label className="text-xs font-medium text-white/60">Message</label>
+            <textarea
+              rows={5}
+              placeholder="Tell us more..."
+              className="w-full rounded-lg border border-white/8 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:ring-1 focus:ring-[oklch(0.6562_0.1826_262.74)]/50 focus:border-[oklch(0.6562_0.1826_262.74)]/40 transition-all resize-none"
+            />
+          </div>
+
+          <Button
+            size="sm"
+            className="w-full h-10 bg-[oklch(0.6562_0.1826_262.74)] hover:bg-[oklch(0.7_0.18_262.74)] text-white text-sm shadow-lg shadow-[oklch(0.6562_0.1826_262.74)]/20"
+          >
+            Send Message
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
 // ─── CTA Banner ───────────────────────────────────────────────────────────────
 
 const CTABanner = () => (
@@ -594,13 +705,17 @@ export const UnauthenticatedView = () => {
       <Navbar />
       <main>
         <Hero />
+        {/* <HeroSection /> */}
         <LogoCloud />
         <Features />
+        <Integrations />
         <HowItWorks />
         <Pricing />
+        <Contact />
         <CTABanner />
       </main>
-      <Footer />
+      <Separator className="bg-white/6 mt-6" />
+      <FooterSection />
     </div>
   );
 };
