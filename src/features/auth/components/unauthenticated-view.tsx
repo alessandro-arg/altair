@@ -15,12 +15,12 @@ import {
   CheckIcon,
   ShieldCheckIcon,
 } from "lucide-react";
-import Integrations from "@/components/integrations-1";
 import FooterSection from "@/components/footer";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { motion, AnimatePresence } from "motion/react";
 import Image from "next/image";
 import HeroSection from "@/components/hero-section";
+import FeaturesSection from "@/components/features-8";
 
 // ─── Navbar ──────────────────────────────────────────────────────────────────
 
@@ -164,27 +164,48 @@ const Hero = () => (
 
 // ─── Logo Cloud ───────────────────────────────────────────────────────────────
 
-const LogoCloud = () => (
-  <section className="py-12 px-4 sm:px-6 border-y border-white/6">
-    <div className="mx-auto max-w-4xl text-center">
-      <p className="text-xs text-white/30 uppercase tracking-widest mb-8 font-medium">
-        Trusted by developers at
-      </p>
-      <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-5">
-        {["Vercel", "Linear", "Planetscale", "Turso", "Neon", "Resend"].map(
-          (name) => (
-            <span
-              key={name}
-              className="text-white/20 font-semibold text-sm hover:text-white/40 transition-colors cursor-default"
-            >
-              {name}
-            </span>
-          ),
-        )}
+const logos = [
+  {
+    name: "Vercel",
+    url: "https://res.cloudinary.com/dfhp33ufc/image/upload/v1715881430/vercel_wordmark_dark_mhv8u8.svg",
+  },
+  {
+    name: "Webflow",
+    url: "https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276560/logos/nymiivu48d5lywhf9rpf.svg",
+  },
+  {
+    name: "Tina",
+    url: "https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276560/logos/afqhiygywyphuou6xtxc.svg",
+  },
+  {
+    name: "Mistral",
+    url: "https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276558/logos/tyos2ayezryjskox3wzs.svg",
+  },
+];
+
+const StaticLogoCloud = () => {
+  return (
+    <div className="w-full py-20">
+      <div className="flex w-full flex-col items-center justify-center px-4 md:px-8">
+        <p className="text-white/50 uppercase tracking-widest mb-10 font-medium">
+          Trusted by developers at
+        </p>
+        <div className="grid grid-cols-2 gap-x-6 sm:grid-cols-4">
+          {logos.map((logo, key) => (
+            <img
+              key={key}
+              src={logo.url}
+              className="h-10 w-28 px-2 brightness-0  dark:invert"
+              alt={`${logo.name}`}
+            />
+          ))}
+        </div>
       </div>
     </div>
-  </section>
-);
+  );
+};
+
+export default StaticLogoCloud;
 
 // ─── Features ─────────────────────────────────────────────────────────────────
 
@@ -290,10 +311,7 @@ const steps = [
 ];
 
 const HowItWorks = () => (
-  <section
-    id="how-it-works"
-    className="py-24 px-4 sm:px-6 border-t border-white/6"
-  >
+  <section id="how-it-works" className="py-24 px-4 sm:px-6">
     <div className="mx-auto max-w-5xl">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
         {/* Left: text */}
@@ -398,21 +416,6 @@ const plans = [
     cta: "Start free trial",
     highlighted: true,
   },
-  {
-    name: "Team",
-    price: "$49",
-    description: "Collaborate and ship faster together.",
-    features: [
-      "Everything in Pro",
-      "Up to 10 seats",
-      "Shared project context",
-      "Team analytics",
-      "SSO / SAML",
-      "SLA support",
-    ],
-    cta: "Contact sales",
-    highlighted: false,
-  },
 ];
 
 const Pricing = () => (
@@ -433,7 +436,7 @@ const Pricing = () => (
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {plans.map((plan) => (
           <div
             key={plan.name}
@@ -477,7 +480,7 @@ const Pricing = () => (
               <Button
                 variant={plan.highlighted ? "default" : "outline"}
                 size="sm"
-                className={`w-full text-xs h-9 ${
+                className={`w-full text-xs h-9 mt-auto ${
                   plan.highlighted
                     ? "bg-[oklch(0.6562_0.1826_262.74)] hover:bg-[oklch(0.7_0.18_262.74)] text-white"
                     : "border-white/10 bg-white/5 text-white/70 hover:text-white hover:bg-white/10"
@@ -496,7 +499,10 @@ const Pricing = () => (
 // ─── Contact ──────────────────────────────────────────────────────────────────
 
 const Contact = () => (
-  <section id="contact" className="py-24 px-4 sm:px-6 border-t border-white/6">
+  <section
+    id="contact"
+    className="py-24 px-4 sm:px-6 border-t border-white/6 sm:border-none"
+  >
     <div className="mx-auto max-w-5xl">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
         {/* Left: info */}
@@ -588,7 +594,7 @@ const Contact = () => (
 // ─── CTA Banner ───────────────────────────────────────────────────────────────
 
 const CTABanner = () => (
-  <section className="py-20 px-4 sm:px-6 border-t border-white/6">
+  <section className="pt-20 pb-10 px-4 sm:px-6 border-t border-white/6 hidden sm:block">
     <div className="mx-auto max-w-2xl text-center">
       <div
         aria-hidden
@@ -611,15 +617,6 @@ const CTABanner = () => (
             <ArrowRightIcon className="size-4" />
           </Button>
         </SignUpButton>
-        <SignInButton>
-          <Button
-            variant="ghost"
-            size="lg"
-            className="w-full sm:w-auto text-white/50 hover:text-white h-11 px-6 text-sm"
-          >
-            I already have an account
-          </Button>
-        </SignInButton>
       </div>
     </div>
   </section>
@@ -702,17 +699,18 @@ const Footer = () => (
 export const UnauthenticatedView = () => {
   return (
     <div className="min-h-screen bg-[oklch(0.2925_0.0157_264.3)] relative">
-      <Navbar />
+      {/* <Navbar /> */}
       <main>
-        <Hero />
-        {/* <HeroSection /> */}
-        <LogoCloud />
-        <Features />
-        <Integrations />
+        {/* <Hero /> */}
+        <HeroSection />
+        <StaticLogoCloud />
+        {/* <Features /> */}
+        <Separator className="bg-white/6 mt-6" />
+        <FeaturesSection />
         <HowItWorks />
         <Pricing />
-        <Contact />
         <CTABanner />
+        <Contact />
       </main>
       <Separator className="bg-white/6 mt-6" />
       <FooterSection />
