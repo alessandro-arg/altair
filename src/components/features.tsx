@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { BrainCircuitIcon, CodeIcon, Shield, Users } from "lucide-react";
+import { Bot, BrainCircuitIcon, CodeIcon } from "lucide-react";
 
 export default function FeaturesSection() {
   return (
@@ -281,22 +281,10 @@ export default function FeaturesSection() {
                       <span className="block h-fit rounded border px-2 py-1 text-xs shadow-sm">
                         Agent 1
                       </span>
-                      <div className="ring-background size-7 ring-4">
-                        <img
-                          className="size-full rounded-full"
-                          src="https://avatars.githubusercontent.com/u/102558960?v=4"
-                          alt=""
-                        />
-                      </div>
+                      <Bot className="rounded-full size-8 bg-muted pl-1" />
                     </div>
                     <div className="relative ml-[calc(50%-1rem)] flex items-center gap-2">
-                      <div className="ring-background size-8 ring-4">
-                        <img
-                          className="size-full rounded-full"
-                          src="https://avatars.githubusercontent.com/u/47919550?v=4"
-                          alt=""
-                        />
-                      </div>
+                      <Bot className="rounded-full size-8 bg-muted pl-1" />
                       <span className="block h-fit rounded border px-2 py-1 text-xs shadow-sm">
                         Agent 2
                       </span>
@@ -305,13 +293,7 @@ export default function FeaturesSection() {
                       <span className="block h-fit rounded border px-2 py-1 text-xs shadow-sm">
                         Agent 3
                       </span>
-                      <div className="ring-background size-7 ring-4">
-                        <img
-                          className="size-full rounded-full"
-                          src="https://avatars.githubusercontent.com/u/31113941?v=4"
-                          alt=""
-                        />
-                      </div>
+                      <Bot className="rounded-full size-8 bg-muted pl-1" />
                     </div>
                   </div>
                 </div>

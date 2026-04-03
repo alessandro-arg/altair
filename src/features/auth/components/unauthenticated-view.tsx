@@ -3,105 +3,15 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { SignInButton, SignUpButton } from "@clerk/nextjs";
-import {
-  BrainCircuitIcon,
-  CodeIcon,
-  ZapIcon,
-  LayersIcon,
-  GitBranchIcon,
-  SparklesIcon,
-  ArrowRightIcon,
-  CheckIcon,
-  ShieldCheckIcon,
-} from "lucide-react";
+import { SignUpButton } from "@clerk/nextjs";
+import { SparklesIcon, ArrowRightIcon, CheckIcon } from "lucide-react";
 import FooterSection from "@/components/footer";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { motion, AnimatePresence } from "motion/react";
 import Image from "next/image";
 import HeroSection from "@/components/hero-section";
-import FeaturesSection from "@/components/features-8";
+import FeaturesSection from "@/components/features";
 import StaticLogoCloud from "@/components/logo-cloud";
-
-// ─── Features ─────────────────────────────────────────────────────────────────
-
-const features = [
-  {
-    icon: BrainCircuitIcon,
-    title: "AI Agents",
-    description:
-      "Autonomous agents that understand your codebase, write tests, fix bugs, and ship features — all without context-switching.",
-  },
-  {
-    icon: CodeIcon,
-    title: "Smart Code Editor",
-    description:
-      "A full-featured editor with syntax highlighting, autocomplete, and inline AI suggestions powered by the latest models.",
-  },
-  {
-    icon: ZapIcon,
-    title: "Instant Execution",
-    description:
-      "Run code in sandboxed environments instantly. No setup, no DevOps — just write and run.",
-  },
-  {
-    icon: LayersIcon,
-    title: "Project Context",
-    description:
-      "Altair indexes your entire project so AI always has the right context to give you accurate, relevant results.",
-  },
-  {
-    icon: GitBranchIcon,
-    title: "Version Control",
-    description:
-      "Built-in Git integration. Create branches, review diffs, and merge with confidence — right inside Altair.",
-  },
-  {
-    icon: ShieldCheckIcon,
-    title: "Secure by default",
-    description:
-      "Enterprise-grade encryption, SOC 2 compliance, and fine-grained access controls keep your code and data safe.",
-  },
-];
-
-const Features = () => (
-  <section id="features" className="py-24 px-4 sm:px-6">
-    <div className="mx-auto max-w-6xl">
-      <div className="text-center mb-14">
-        <Badge
-          variant="outline"
-          className="mb-4 border-white/10 bg-white/5 text-white/50 text-xs"
-        >
-          Features
-        </Badge>
-        <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white mb-4">
-          Everything you need to ship
-        </h2>
-        <p className="text-white/40 max-w-md mx-auto text-sm leading-relaxed">
-          From intelligent code generation to seamless deployment — Altair has
-          every tool a modern developer needs.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {features.map((f) => (
-          <div
-            key={f.title}
-            className="group rounded-xl border border-white/[0.07] bg-[oklch(0.25_0.012_264.34)] p-6 hover:border-white/13 hover:bg-[oklch(0.27_0.013_264.34)] transition-all duration-200"
-          >
-            <div className="size-9 rounded-lg bg-[oklch(0.6562_0.1826_262.74)]/10 flex items-center justify-center mb-4 group-hover:bg-[oklch(0.6562_0.1826_262.74)]/15 transition-colors">
-              <f.icon className="size-4.5 text-[oklch(0.6562_0.1826_262.74)]" />
-            </div>
-            <h3 className="font-semibold text-white text-sm mb-2">{f.title}</h3>
-            <p className="text-white/40 text-sm leading-relaxed">
-              {f.description}
-            </p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-);
 
 // ─── How it works ─────────────────────────────────────────────────────────────
 
@@ -515,13 +425,9 @@ const Footer = () => (
 export const UnauthenticatedView = () => {
   return (
     <div className="min-h-screen bg-[oklch(0.2925_0.0157_264.3)] relative">
-      {/* <Navbar /> */}
       <main>
-        {/* <Hero /> */}
-        {/* <Navbar /> */}
         <HeroSection />
         <StaticLogoCloud />
-        {/* <Features /> */}
         <Separator className="bg-white/6 mt-6" />
         <div id="features">
           <FeaturesSection />
