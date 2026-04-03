@@ -176,7 +176,7 @@ export default function FooterSection() {
         </div>
         <span className="text-muted-foreground block text-center text-sm">
           {" "}
-          © {2026} Tailark, All rights reserved
+          © {2026} Altair, All rights reserved
         </span>
       </div>
     </footer>

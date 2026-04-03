@@ -21,6 +21,7 @@ import { motion, AnimatePresence } from "motion/react";
 import Image from "next/image";
 import HeroSection from "@/components/hero-section";
 import FeaturesSection from "@/components/features-8";
+import { Poppins } from "next/font/google";
 
 // ─── Navbar ──────────────────────────────────────────────────────────────────
 
@@ -54,7 +55,7 @@ const Navbar = () => (
       <div className="flex items-center gap-2">
         <SignInButton>
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
             className="text-white/70 hover:text-white hover:bg-white/5 text-xs h-8 px-3"
           >
@@ -311,7 +312,10 @@ const steps = [
 ];
 
 const HowItWorks = () => (
-  <section id="how-it-works" className="py-24 px-4 sm:px-6">
+  <section
+    id="how-it-works"
+    className="py-24 px-4 sm:px-6 border-t border-white/6"
+  >
     <div className="mx-auto max-w-5xl">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
         {/* Left: text */}
@@ -499,10 +503,7 @@ const Pricing = () => (
 // ─── Contact ──────────────────────────────────────────────────────────────────
 
 const Contact = () => (
-  <section
-    id="contact"
-    className="py-24 px-4 sm:px-6 border-t border-white/6 sm:border-none"
-  >
+  <section id="contact" className="py-24 px-4 sm:px-6 border-t border-white/6">
     <div className="mx-auto max-w-5xl">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
         {/* Left: info */}
@@ -702,15 +703,21 @@ export const UnauthenticatedView = () => {
       {/* <Navbar /> */}
       <main>
         {/* <Hero /> */}
+        {/* <Navbar /> */}
         <HeroSection />
         <StaticLogoCloud />
         {/* <Features /> */}
         <Separator className="bg-white/6 mt-6" />
-        <FeaturesSection />
+        <div id="features">
+          <FeaturesSection />
+        </div>
+        <div id="pricing">
+          <Pricing />
+        </div>
         <HowItWorks />
-        <Pricing />
-        <CTABanner />
-        <Contact />
+        <div id="contact">
+          <Contact />
+        </div>
       </main>
       <Separator className="bg-white/6 mt-6" />
       <FooterSection />

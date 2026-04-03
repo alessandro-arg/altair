@@ -3,25 +3,30 @@ import { Logo } from "@/components/logo";
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { ArrowRightIcon, Menu, SparklesIcon, X } from "lucide-react";
 import Image from "next/image";
+import { Badge } from "./ui/badge";
+import { SignInButton, SignUpButton } from "@clerk/nextjs";
+import { cn } from "@/lib/utils";
+import { Poppins } from "next/font/google";
 
 const menuItems = [
-  { name: "Features", href: "#" },
-  { name: "Solution", href: "#" },
-  { name: "Pricing", href: "#" },
-  { name: "About", href: "#" },
+  { name: "Features", href: "#features" },
+  { name: "Pricing", href: "#pricing" },
+  { name: "Contact", href: "#contact" },
 ];
+
+const font = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
 export default function HeroSection() {
   const [menuState, setMenuState] = useState(false);
   return (
     <>
-      <header>
-        <nav
-          data-state={menuState && "active"}
-          className="fixed z-20 w-full border-b border-dashed bg-white backdrop-blur md:relative dark:bg-zinc-950/50 lg:dark:bg-transparent"
-        >
+      <header className="fixed top-0 inset-x-0 z-50 border-b border-white/6 bg-[oklch(0.2925_0.0157_264.3)]/80 backdrop-blur-md">
+        <nav data-state={menuState && "active"}>
           <div className="m-auto max-w-5xl px-6">
             <div className="flex flex-wrap items-center justify-between gap-6 py-3 lg:gap-0 lg:py-4">
               <div className="flex w-full justify-between lg:w-auto">
@@ -30,7 +35,18 @@ export default function HeroSection() {
                   aria-label="home"
                   className="flex items-center space-x-2"
                 >
-                  <Logo />
+                  <div className="size-7 rounded-lg bg-[oklch(0.6562_0.1826_262.74)] flex items-center justify-center">
+                    <Image
+                      src="/logo.svg"
+                      alt="altair"
+                      width={8}
+                      height={8}
+                      className="size-8 md:size-11.5"
+                    />
+                  </div>
+                  <span className={cn("font-semibold text-lg", font.className)}>
+                    Altair
+                  </span>
                 </Link>
 
                 <button
@@ -45,31 +61,38 @@ export default function HeroSection() {
 
               <div className="bg-background in-data-[state=active]:block lg:in-data-[state=active]:flex mb-6 hidden w-full flex-wrap items-center justify-end space-y-8 rounded-3xl border p-6 shadow-2xl shadow-zinc-300/20 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent">
                 <div className="lg:pr-4">
-                  <ul className="space-y-6 text-base lg:flex lg:gap-8 lg:space-y-0 lg:text-sm">
+                  <ul className="space-y-6 text-base lg:flex lg:gap-8 lg:space-y-0 lg:text-sm text-white/50 font-medium">
                     {menuItems.map((item, index) => (
                       <li key={index}>
-                        <Link
+                        <a
                           href={item.href}
                           className="text-muted-foreground hover:text-accent-foreground block duration-150"
                         >
                           <span>{item.name}</span>
-                        </Link>
+                        </a>
                       </li>
                     ))}
                   </ul>
                 </div>
 
                 <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit lg:border-l lg:pl-6">
-                  <Button asChild variant="outline" size="sm">
-                    <Link href="#">
-                      <span>Login</span>
-                    </Link>
-                  </Button>
-                  <Button asChild size="sm">
-                    <Link href="#">
-                      <span>Login</span>
-                    </Link>
-                  </Button>
+                  <SignInButton>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-white/70 hover:text-white hover:bg-white/5 text-xs h-8 px-3"
+                    >
+                      Log in
+                    </Button>
+                  </SignInButton>
+                  <SignUpButton>
+                    <Button
+                      size="sm"
+                      className="bg-[oklch(0.6562_0.1826_262.74)] hover:bg-[oklch(0.7_0.18_262.74)] text-white text-xs h-8 px-3 shadow-lg shadow-[oklch(0.6562_0.1826_262.74)]/20"
+                    >
+                      Sign up
+                    </Button>
+                  </SignUpButton>
                 </div>
               </div>
             </div>
@@ -90,36 +113,56 @@ export default function HeroSection() {
         <section className="bg-muted/50 dark:bg-background overflow-hidden">
           <div className="relative mx-auto max-w-5xl px-6 pt-28 lg:pt-24">
             <div className="relative z-10 mx-auto max-w-2xl text-center">
-              <h1 className="text-balance text-4xl font-semibold md:text-5xl lg:text-6xl">
-                Modern Software testing reimagined
+              <Badge
+                variant="outline"
+                className="mb-6 inline-flex items-center gap-1.5 border-white/10 bg-white/5 text-white/60 text-sm px-3 py-1"
+              >
+                <SparklesIcon className="size-5 text-[oklch(0.6562_0.1826_262.74)]" />
+                Version 1.0 out now!
+              </Badge>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white leading-[1.1] mb-6">
+                Build smarter with
+                <br />
+                <span className="text-[oklch(0.6562_0.1826_262.74)]">
+                  AI-powered
+                </span>{" "}
+                workflows
               </h1>
-              <p className="text-muted-foreground mx-auto my-8 max-w-2xl text-xl">
-                Officiis laudantium excepturi ducimus rerum dignissimos, and
-                tempora nam vitae, excepturi ducimus iste provident dolores.
+              <p className="text-base sm:text-lg text-white/50 max-w-xl mx-auto mb-10 leading-relaxed">
+                Altair combines intelligent agents, a code editor, and real-time
+                collaboration - all in one place. From idea to production,
+                faster.
               </p>
 
-              <Button asChild size="lg">
-                <Link href="#">
-                  <span className="btn-label">Start Building</span>
-                </Link>
-              </Button>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <SignUpButton>
+                  <Button
+                    size="lg"
+                    className="w-full sm:w-auto bg-[oklch(0.6562_0.1826_262.74)] hover:bg-[oklch(0.7_0.18_262.74)] text-white h-11 px-6 text-sm shadow-xl shadow-[oklch(0.6562_0.1826_262.74)]/25 gap-2"
+                  >
+                    Get started
+                    <ArrowRightIcon className="size-4" />
+                  </Button>
+                </SignUpButton>
+              </div>
             </div>
           </div>
 
           <div className="mx-auto 2xl:max-w-7xl">
             <div className="perspective-distant pl-8 lg:pl-44">
-              <div className="lg:h-176 rotate-x-20 mask-b-from-55% mask-b-to-100% mask-r-from-75% skew-x-12 pl-6 pt-6">
+              <div className="lg:h-176 rotate-x-20 mask-b-from-55% mask-b-to-100% mask-r-from-75% skew-x-12 pl-0 pt-6">
                 <Image
                   className="rounded-lg border shadow-xl dark:hidden"
                   src="/card.png"
-                  alt="Tailark hero section"
+                  alt="hero section"
                   width={2880}
                   height={2074}
                 />
                 <Image
                   className="rounded-lg hidden border shadow-xl dark:block"
-                  src="/dark-card.webp"
-                  alt="Tailark hero section"
+                  src="/altair_mockup.webp"
+                  loading="eager"
+                  alt="hero section image"
                   width={2880}
                   height={2074}
                 />
