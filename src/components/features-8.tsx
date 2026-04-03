@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Shield, Users } from "lucide-react";
+import { BrainCircuitIcon, CodeIcon, Shield, Users } from "lucide-react";
 
 export default function FeaturesSection() {
   return (
@@ -26,7 +26,7 @@ export default function FeaturesSection() {
                   </span>
                 </div>
                 <h2 className="mt-6 text-center text-3xl font-semibold">
-                  Customizable
+                  Project Context
                 </h2>
               </CardContent>
             </Card>
@@ -89,8 +89,8 @@ export default function FeaturesSection() {
                     Secure by default
                   </h2>
                   <p className="text-foreground">
-                    Provident fugit and vero voluptate. magnam magni doloribus
-                    dolores voluptates a sapiente nisi.
+                    Enterprise-grade encryption, SOC 2 compliance, and
+                    fine-grained access controls keep your code and data safe.
                   </p>
                 </div>
               </CardContent>
@@ -181,11 +181,11 @@ export default function FeaturesSection() {
                 </div>
                 <div className="relative z-10 mt-14 space-y-2 text-center">
                   <h2 className="text-lg font-medium transition">
-                    Faster than light
+                    Instant Execution
                   </h2>
                   <p className="text-foreground">
-                    Provident fugit vero voluptate. magnam magni doloribus
-                    dolores voluptates inventore nisi.
+                    Run code in sandboxed environments instantly. No setup, no
+                    DevOps - just write and run.
                   </p>
                 </div>
               </CardContent>
@@ -194,15 +194,16 @@ export default function FeaturesSection() {
               <CardContent className="grid pt-6 sm:grid-cols-2">
                 <div className="relative z-10 flex flex-col justify-between space-y-12 lg:space-y-6">
                   <div className="relative flex aspect-square size-12 rounded-full border before:absolute before:-inset-2 before:rounded-full before:border dark:border-white/10 dark:before:border-white/5">
-                    <Shield className="m-auto size-5" strokeWidth={1} />
+                    <CodeIcon className="m-auto size-5" strokeWidth={1} />
                   </div>
                   <div className="space-y-2">
                     <h2 className="group-hover:text-secondary-950 text-lg font-medium text-zinc-800 transition dark:text-white">
-                      Faster than light
+                      Smart Code Editor
                     </h2>
                     <p className="text-foreground">
-                      Provident fugit vero voluptate. Voluptates a sapiente
-                      inventore nisi.
+                      A full-featured editor with syntax highlighting,
+                      autocomplete, and inline AI suggestions powered by the
+                      latest models.
                     </p>
                   </div>
                 </div>
@@ -259,15 +260,18 @@ export default function FeaturesSection() {
               <CardContent className="grid h-full pt-6 sm:grid-cols-2">
                 <div className="relative z-10 flex flex-col justify-between space-y-12 lg:space-y-6">
                   <div className="relative flex aspect-square size-12 rounded-full border before:absolute before:-inset-2 before:rounded-full before:border dark:border-white/10 dark:before:border-white/5">
-                    <Users className="m-auto size-6" strokeWidth={1} />
+                    <BrainCircuitIcon
+                      className="m-auto size-6"
+                      strokeWidth={1}
+                    />
                   </div>
                   <div className="space-y-2">
                     <h2 className="text-lg font-medium transition">
-                      Keep your loved ones safe
+                      AI Agents
                     </h2>
                     <p className="text-foreground">
-                      Voluptate. magnam magni doloribus dolores voluptates a
-                      sapiente inventore nisi.
+                      Autonomous agents that understand your codebase, write
+                      tests, fix bugs, and ship features.
                     </p>
                   </div>
                 </div>
@@ -275,7 +279,7 @@ export default function FeaturesSection() {
                   <div className="relative flex h-full flex-col justify-center space-y-6 py-6">
                     <div className="relative flex w-[calc(50%+0.875rem)] items-center justify-end gap-2">
                       <span className="block h-fit rounded border px-2 py-1 text-xs shadow-sm">
-                        Likeur
+                        Agent 1
                       </span>
                       <div className="ring-background size-7 ring-4">
                         <img
@@ -294,12 +298,12 @@ export default function FeaturesSection() {
                         />
                       </div>
                       <span className="block h-fit rounded border px-2 py-1 text-xs shadow-sm">
-                        M. Irung
+                        Agent 2
                       </span>
                     </div>
                     <div className="relative flex w-[calc(50%+0.875rem)] items-center justify-end gap-2">
                       <span className="block h-fit rounded border px-2 py-1 text-xs shadow-sm">
-                        B. Ng
+                        Agent 3
                       </span>
                       <div className="ring-background size-7 ring-4">
                         <img

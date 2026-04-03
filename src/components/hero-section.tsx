@@ -1,5 +1,5 @@
 "use client";
-import { Logo } from "@/components/logo";
+
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -138,36 +138,55 @@ export default function HeroSection() {
                 <SignUpButton>
                   <Button
                     size="lg"
-                    className="w-full sm:w-auto bg-[oklch(0.6562_0.1826_262.74)] hover:bg-[oklch(0.7_0.18_262.74)] text-white h-11 px-6 text-sm shadow-xl shadow-[oklch(0.6562_0.1826_262.74)]/25 gap-2"
+                    className="w-30 sm:w-auto bg-[oklch(0.6562_0.1826_262.74)] hover:bg-[oklch(0.7_0.18_262.74)] text-white h-11 px-6 text-sm shadow-xl shadow-[oklch(0.6562_0.1826_262.74)]/25 gap-2"
                   >
                     Get started
-                    <ArrowRightIcon className="size-4" />
+                    <ArrowRightIcon className="size-4 " />
                   </Button>
                 </SignUpButton>
               </div>
             </div>
           </div>
 
-          <div className="mx-auto 2xl:max-w-7xl">
-            <div className="perspective-distant pl-8 lg:pl-44">
-              <div className="lg:h-176 rotate-x-20 mask-b-from-55% mask-b-to-100% mask-r-from-75% skew-x-12 pl-0 pt-6">
-                <Image
-                  className="rounded-lg border shadow-xl dark:hidden"
-                  src="/card.png"
-                  alt="hero section"
-                  width={2880}
-                  height={2074}
-                />
-                <Image
-                  className="rounded-lg hidden border shadow-xl dark:block"
-                  src="/altair_mockup.webp"
-                  loading="eager"
-                  alt="hero section image"
-                  width={2880}
-                  height={2074}
-                />
+          <div className="relative mx-auto mt-16 max-w-[90%] lg:max-w-5xl">
+            <div className="rounded-2xl border border-white/8 bg-[oklch(0.25_0.012_264.34)] overflow-hidden shadow-2xl shadow-black/40">
+              {/* Fake window chrome */}
+              <div className="flex items-center gap-1.5 px-4 py-3 border-b border-white/6">
+                <div className="size-2.5 rounded-full bg-white/10" />
+                <div className="size-2.5 rounded-full bg-white/10" />
+                <div className="size-2.5 rounded-full bg-white/10" />
+                <div className="ml-3 h-5 flex-1 max-w-48 rounded-md bg-white/5 flex items-center px-2">
+                  <span className="text-white/30 text-[10px]">
+                    altair.alessandro-argenziano.com
+                  </span>
+                </div>
+              </div>
+              {/* Content placeholder — swap for real screenshot */}
+              <div className="aspect-video bg-linear-to-br from-[oklch(0.28_0.015_264.3)] to-[oklch(0.22_0.01_264.3)] flex items-center justify-center">
+                <div className="text-center space-y-3">
+                  <Image
+                    className="dark:hidden"
+                    src="/card.png"
+                    alt="hero section"
+                    width={2880}
+                    height={2074}
+                  />
+                  <Image
+                    className=" dark:block"
+                    src="/altair_mockup.webp"
+                    loading="eager"
+                    alt="hero section image"
+                    width={2880}
+                    height={2074}
+                  />
+                </div>
               </div>
             </div>
+            {/* Glow under card */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -bottom-8 inset-x-8 h-16 bg-[oklch(0.6562_0.1826_262.74)]/10 blur-2xl rounded-full"
+            />
           </div>
         </section>
       </main>
