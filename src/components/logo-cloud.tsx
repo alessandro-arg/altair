@@ -1,9 +1,5 @@
 const logos = [
   {
-    name: "Vercel",
-    url: "https://res.cloudinary.com/dfhp33ufc/image/upload/v1715881430/vercel_wordmark_dark_mhv8u8.svg",
-  },
-  {
     name: "Webflow",
     url: "https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276560/logos/nymiivu48d5lywhf9rpf.svg",
   },
@@ -19,12 +15,12 @@ const logos = [
 
 const StaticLogoCloud = () => {
   return (
-    <div className="w-full py-20">
+    <div className="w-full py-20 flex items-center justify-center">
       <div className="flex w-full flex-col items-center justify-center px-4 md:px-8">
         <p className="text-white/50 uppercase tracking-widest mb-10 font-medium">
           Trusted by developers at
         </p>
-        <div className="grid grid-cols-2 gap-x-6 sm:grid-cols-4">
+        <div className="flex justify-center items-center gap-6 flex-wrap max-w-xl mx-auto">
           {logos.map((logo, key) => (
             <img
               key={key}
