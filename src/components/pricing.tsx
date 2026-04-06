@@ -4,34 +4,35 @@ import { CheckIcon } from "lucide-react";
 import { Badge } from "./ui/badge";
 import { SignUpButton } from "@clerk/nextjs";
 import { Button } from "./ui/button";
+import { cn } from "@/lib/utils";
 
 const plans = [
   {
     name: "Free",
-    price: "$0",
+    price: "€0",
     description: "Perfect for side projects and exploration.",
     features: [
       "50 AI completions / mo",
-      "1 active project",
+      "2 active projects",
       "Community support",
       "Basic code editor",
     ],
-    cta: "Get started",
+    cta: "Start for free",
     highlighted: false,
   },
   {
     name: "Pro",
-    price: "$19",
+    price: "€10",
     description: "For developers who ship every day.",
     features: [
-      "Unlimited AI completions",
+      "1000 AI completions / mo",
       "Unlimited projects",
       "Priority support",
       "Advanced AI agents",
-      "Git integration",
+      "GitHub Import & Export",
       "Custom models",
     ],
-    cta: "Start free trial",
+    cta: "Upgrade to pro",
     highlighted: true,
   },
 ];
@@ -82,7 +83,9 @@ export const Pricing = () => (
               <p className="mt-1.5 text-xs text-white/40">{plan.description}</p>
             </div>
 
-            <ul className="space-y-2.5 mb-6">
+            <ul
+              className={cn("space-y-2.5 mb-6", !plan.highlighted && "mb-19")}
+            >
               {plan.features.map((f) => (
                 <li
                   key={f}

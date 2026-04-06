@@ -1,3 +1,5 @@
+"use client";
+
 import { AnimatePresence, motion } from "motion/react";
 import { Badge } from "./ui/badge";
 import Image from "next/image";
@@ -18,9 +20,9 @@ const steps = [
   },
   {
     number: "03",
-    title: "Review and ship",
+    title: "App preview",
     description:
-      "Review AI-generated changes with inline diffs, approve what you want, and push to production.",
+      "See what you or your AI have build, directly in the browser. Let Altair do this all for you.",
   },
 ];
 
@@ -30,9 +32,9 @@ export const HowItWorks = () => (
     className="py-24 px-4 sm:px-6 border-t border-white/6"
   >
     <div className="mx-auto max-w-5xl">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-20 items-center">
         {/* Left: text */}
-        <div>
+        <div className="col-span-2">
           <Badge
             variant="outline"
             className="mb-4 border-white/10 bg-white/5 text-white/50 text-xs"
@@ -44,7 +46,7 @@ export const HowItWorks = () => (
           </h2>
           <p className="text-white/40 text-sm leading-relaxed mb-10">
             Altair removes the friction between thinking and shipping. No
-            boilerplate, no config hell — just focus on building.
+            boilerplate, no config hell - just focus on building.
           </p>
 
           <div className="space-y-8">
@@ -69,9 +71,9 @@ export const HowItWorks = () => (
         </div>
 
         {/* Right: placeholder visual */}
-        <div className="bg-background relative flex overflow-hidden rounded-3xl border p-2">
+        <div className="bg-background relative flex overflow-hidden rounded-3xl border p-2 mt-10 col-span-3">
           <div className="w-15 absolute inset-0 right-0 ml-auto border-l bg-[repeating-linear-gradient(-45deg,var(--color-border),var(--color-border)_1px,transparent_1px,transparent_8px)]"></div>
-          <div className="aspect-4/3 bg-background relative w-[calc(3/4*100%+3rem)] rounded-2xl">
+          <div className="aspect-3/3 bg-background relative w-[calc(3/4*100%+5rem)] rounded-2xl">
             <AnimatePresence mode="wait">
               <motion.div
                 key="image-id"
@@ -82,8 +84,8 @@ export const HowItWorks = () => (
                 className="size-full overflow-hidden rounded-2xl border bg-zinc-900 shadow-md"
               >
                 <Image
-                  src="/logo.png"
-                  className="size-full object-cover object-top-left dark:mix-blend-lighten"
+                  src="/how-it-works.webp"
+                  className="size-full object-cover object-top-right dark:mix-blend-lighten"
                   alt="altair image"
                   width={1207}
                   height={929}
