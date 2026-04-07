@@ -78,18 +78,18 @@ export function ContactForm() {
           } as React.CSSProperties,
         });
       } else {
-        toast.error(
+        const errorMessage =
           error instanceof Error
             ? error.message
-            : toast.error("Oops, there was an error processing your request.", {
-                style: {
-                  "--normal-bg":
-                    "color-mix(in oklab, var(--destructive) 10%, var(--background))",
-                  "--normal-text": "var(--destructive)",
-                  "--normal-border": "var(--destructive)",
-                } as React.CSSProperties,
-              }),
-        );
+            : "Oops, there was an error processing your request.";
+        toast.error(errorMessage, {
+          style: {
+            "--normal-bg":
+              "color-mix(in oklab, var(--destructive) 10%, var(--background))",
+            "--normal-text": "var(--destructive)",
+            "--normal-border": "var(--destructive)",
+          } as React.CSSProperties,
+        });
       }
     } finally {
       clearTimeout(timeout);

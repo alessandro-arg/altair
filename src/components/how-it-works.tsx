@@ -22,7 +22,7 @@ const steps = [
     number: "03",
     title: "App preview",
     description:
-      "See what you or your AI have build, directly in the browser. Let Altair do this all for you.",
+      "See what you or your AI have built, directly in the browser. Let Altair do this all for you.",
   },
 ];
 

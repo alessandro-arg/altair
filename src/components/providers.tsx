@@ -12,7 +12,7 @@ import { ThemeProvider } from "./theme-provider";
 import { UnauthenticatedView } from "@/features/auth/components/unauthenticated-view";
 import { AuthLoadingView } from "@/features/auth/components/auth-loading-view";
 import { shadcn, dark } from "@clerk/ui/themes";
-import { Toaster } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 
 const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
