@@ -4,11 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { SignUpButton } from "@clerk/nextjs";
-import { SparklesIcon, ArrowRightIcon, CheckIcon } from "lucide-react";
+import { SparklesIcon, ArrowRightIcon } from "lucide-react";
 import FooterSection from "@/components/footer";
-import { BorderBeam } from "@/components/ui/border-beam";
-import { motion, AnimatePresence } from "motion/react";
-import Image from "next/image";
 import HeroSection from "@/components/hero-section";
 import FeaturesSection from "@/components/features";
 import StaticLogoCloud from "@/components/logo-cloud";
@@ -124,7 +121,7 @@ const CTABanner = () => (
         free account.
       </p>
       <div className="relative flex flex-col sm:flex-row items-center justify-center gap-3">
-        <SignUpButton>
+        <SignUpButton mode="modal">
           <Button
             size="lg"
             className="w-full sm:w-auto bg-[oklch(0.6562_0.1826_262.74)] hover:bg-[oklch(0.7_0.18_262.74)] text-white h-11 px-8 text-sm shadow-xl shadow-[oklch(0.6562_0.1826_262.74)]/20 gap-2"

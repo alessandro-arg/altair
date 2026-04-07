@@ -76,7 +76,7 @@ export default function HeroSection() {
                 </div>
 
                 <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit lg:border-l lg:pl-6">
-                  <SignInButton>
+                  <SignInButton mode="modal">
                     <Button
                       variant="outline"
                       size="sm"
@@ -85,7 +85,7 @@ export default function HeroSection() {
                       Log in
                     </Button>
                   </SignInButton>
-                  <SignUpButton>
+                  <SignUpButton mode="modal">
                     <Button
                       size="sm"
                       className="bg-[oklch(0.6562_0.1826_262.74)] hover:bg-[oklch(0.7_0.18_262.74)] text-white text-xs h-8 px-3 shadow-lg shadow-[oklch(0.6562_0.1826_262.74)]/20"
@@ -135,7 +135,7 @@ export default function HeroSection() {
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                <SignUpButton>
+                <SignUpButton mode="modal">
                   <Button
                     size="lg"
                     className="w-30 sm:w-auto bg-[oklch(0.6562_0.1826_262.74)] hover:bg-[oklch(0.7_0.18_262.74)] text-white h-11 px-6 text-sm shadow-xl shadow-[oklch(0.6562_0.1826_262.74)]/25 gap-2"
