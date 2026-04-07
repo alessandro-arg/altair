@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ContactForm } from "./contact-form";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
@@ -37,23 +38,23 @@ export const Contact = () => (
               <p className="text-xs font-semibold text-white mb-2">Social</p>
 
               <div className="flex items-center gap-4">
-                <a
+                <Link
                   href="https://github.com/alessandro-arg"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-white/60 hover:text-white transition"
                 >
                   <FaGithub size={20} />
-                </a>
+                </Link>
 
-                <a
+                <Link
                   href="https://www.linkedin.com/in/alessandro-argenziano"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-white/60 hover:text-white transition"
                 >
                   <FaLinkedin size={20} />
-                </a>
+                </Link>
               </div>
             </div>
           </div>
