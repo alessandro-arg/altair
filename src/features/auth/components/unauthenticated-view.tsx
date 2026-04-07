@@ -1,38 +1,36 @@
-import { Button } from "@/components/ui/button";
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemDescription,
-  ItemMedia,
-  ItemTitle,
-} from "@/components/ui/item";
-import { SignInButton } from "@clerk/nextjs";
-import { ShieldAlertIcon } from "lucide-react";
+"use client";
+
+import { Separator } from "@/components/ui/separator";
+import FooterSection from "@/components/footer";
+import HeroSection from "@/components/hero-section";
+import FeaturesSection from "@/components/features";
+import StaticLogoCloud from "@/components/logo-cloud";
+import { Pricing } from "@/components/pricing";
+import { HowItWorks } from "@/components/how-it-works";
+import { Contact } from "@/components/contact";
 
 export const UnauthenticatedView = () => {
   return (
-    <div className="flex items-center justify-center h-screen bg-background">
-      <div className="w-full max-w-lg bg-muted">
-        <Item variant="outline">
-          <ItemMedia variant="icon">
-            <ShieldAlertIcon />
-          </ItemMedia>
-          <ItemContent>
-            <ItemTitle>Unauthorized access</ItemTitle>
-            <ItemDescription>
-              You are not authorized to access this resource.
-            </ItemDescription>
-          </ItemContent>
-          <ItemActions>
-            <SignInButton>
-              <Button variant="outline" size="sm">
-                Sign in
-              </Button>
-            </SignInButton>
-          </ItemActions>
-        </Item>
-      </div>
+    <div className="min-h-screen bg-[oklch(0.2925_0.0157_264.3)] relative">
+      <main>
+        <HeroSection />
+        <StaticLogoCloud />
+        <Separator className="bg-white/6 mt-6" />
+        <div id="features">
+          <FeaturesSection />
+        </div>
+        <div id="pricing">
+          <Pricing />
+        </div>
+        <div id="how-it-works">
+          <HowItWorks />
+        </div>
+        <div id="contact">
+          <Contact />
+        </div>
+      </main>
+      <Separator className="bg-white/6 mt-6" />
+      <FooterSection />
     </div>
   );
 };

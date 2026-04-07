@@ -80,7 +80,7 @@
 }
 
 .dark {
-  --background: oklch(0.2925 0.0157 264.3);
+  --background: oklch(29.252% 0.0157 264.319);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.25 0.012 264.34);
   --card-foreground: oklch(0.985 0 0);
@@ -120,6 +120,9 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  html {
+    @apply scroll-smooth;
   }
 }
 
